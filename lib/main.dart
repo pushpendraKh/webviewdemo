@@ -1,10 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:webviewdemo/web-view-view-model.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Permission.camera.request();
+
   runApp(const MyApp());
 }
 
@@ -62,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: TextButton(
           child: const Text("Open Web-view"),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const MyWebView(url: "https://gnjw4f.csb.app/"),
+            builder: (_) => const MyWebView(url: "https://global.transak.com"),
           )),
         ),
       ),
@@ -99,72 +102,18 @@ class _MyWebViewState extends State<MyWebView> {
       ),
       body: Stack(
         children: [
+          // SignInWebView(), // uncomment to see inappwebview_flutter and comment the next line
           WebViewWidget(
             controller: viewModel.webViewController,
           ),
           if (viewModel.isLoading)
             const Positioned.fill(
-                child: Center(child: LinearProgressIndicator())),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
         ],
       ),
-    );
-  }
-}
-
-class WebViewViewModel extends ChangeNotifier {
-  WebViewViewModel({required this.url}) {
-    createController();
-  }
-
-  final String url;
-  late WebViewController webViewController;
-  bool isLoading = true;
-
-  void createController() {
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
-
-    final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
-
-    if (controller.platform is AndroidWebViewController) {
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(true);
-    }
-
-    controller
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(url));
-
-    controller.setNavigationDelegate(_getNavigationDelegate);
-    webViewController = controller;
-  }
-
-  NavigationDelegate get _getNavigationDelegate {
-    return NavigationDelegate(
-      onNavigationRequest: (request) {
-        print(request.url);
-        return NavigationDecision.navigate;
-      },
-      onPageStarted: (str) {
-        print("onPageStarted :: $str");
-      },
-      onPageFinished: (str) async {
-        print("onPageFinished $str");
-        isLoading = false;
-        notifyListeners();
-      },
-      onWebResourceError: (error) {
-        print("onWebResourceError $error");
-        isLoading = false;
-        notifyListeners();
-      },
     );
   }
 }
