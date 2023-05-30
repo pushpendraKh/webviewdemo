@@ -65,7 +65,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: TextButton(
           child: const Text("Open Web-view"),
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => const MyWebView(url: "https://global.transak.com"),
+            builder: (_) => const MyWebView(
+                url:
+                    "https://global.transak.com?fiatCurrency=GBP&walletAddress=0x6353D15E8A61df4eD412746654D44B8188a737C1&fiatAmount=35"),
           )),
         ),
       ),
