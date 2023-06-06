@@ -8,7 +8,8 @@ class SignInWebView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => InAppWebView(
         initialUrlRequest: URLRequest(
-          url: Uri.parse("https://global.transak.com"),
+          url: Uri.parse(
+              "https://global.transak.com?fiatCurrency=GBP&walletAddress=0x6353D15E8A61df4eD412746654D44B8188a737C1&fiatAmount=35"),
         ),
         initialOptions: InAppWebViewGroupOptions(
           crossPlatform: InAppWebViewOptions(

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:webviewdemo/signinwebview.dart';
 import 'package:webviewdemo/web-view-view-model.dart';
 
 void main() async {
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => const MyWebView(
                 url:
-                    "https://global.transak.com?fiatCurrency=GBP&walletAddress=0x6353D15E8A61df4eD412746654D44B8188a737C1&fiatAmount=35"),
+                    "https://buy-sandbox.moonpay.com/?apiKey=pk_test_OfRcZKST5oyKxlOXLRePxAGgm5KJJ"),
           )),
         ),
       ),
@@ -104,10 +104,10 @@ class _MyWebViewState extends State<MyWebView> {
       ),
       body: Stack(
         children: [
-          // SignInWebView(), // uncomment to see inappwebview_flutter and comment the next line
-          WebViewWidget(
-            controller: viewModel.webViewController,
-          ),
+          SignInWebView(), // uncomment to see inappwebview_flutter and comment the next line
+          // // WebViewWidget(
+          //   controller: viewModel.webViewController,
+          // ),
           if (viewModel.isLoading)
             const Positioned.fill(
               child: Center(
